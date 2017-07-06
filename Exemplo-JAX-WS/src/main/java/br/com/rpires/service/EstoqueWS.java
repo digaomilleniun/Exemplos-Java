@@ -15,6 +15,7 @@ import br.com.rpires.dao.ItemDao;
 import br.com.rpires.domain.Filtro;
 import br.com.rpires.domain.Filtros;
 import br.com.rpires.domain.Item;
+import br.com.rpires.domain.ItemValidador;
 import br.com.rpires.domain.ListaItens;
 import br.com.rpires.domain.usuario.AutorizacaoException;
 import br.com.rpires.domain.usuario.TokenDao;
@@ -68,6 +69,8 @@ public class EstoqueWS {
 		if (!isValido) {
 			throw new AutorizacaoException("Autorização Falhou");
 		}
+		
+		new ItemValidador(item).validate();
 		
 		dao.cadastrar(item);
 		return item;
