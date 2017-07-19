@@ -20,5 +20,15 @@ public class PublicaEstoqueWS {
 
 		// associando URL com implementacao
 		Endpoint.publish(URL, implementacaoWS);
+		
+		RelatorioServiceWS relWS = new RelatorioServiceWS();
+		
+		String URLRel = "http://localhost:8081/relatoriows";
+
+		System.out.println("RelatorioServiceWS rodando: " + URLRel);
+
+		// associando URL com implementacao
+		Endpoint.publish(URLRel, relWS);
+		
 	}
 }

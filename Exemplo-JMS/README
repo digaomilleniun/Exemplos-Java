@@ -1,0 +1,14 @@
+Neste exemplos estamos utilizando o servidor ActiveMQ.
+
+1 - Baixe o servidor no link: 
+http://activemq.apache.org/
+
+2 - Descompacte o mesmo.
+
+3 - Para inicializar 
+Vá para a pasta de instalação em bin/linux-x86-64 e execute o comando abaixo:
+./activemq start
+
+4 - No arquivo jndi.properties altere o nome da fila para a sua e onde se encontra o servidor.
+java.naming.provider.url = URL de instalação do servidor exemplo: tcp://llocalhost:61616
+queue.MyQueue = Para o nome da sua fila que você criou no servidor.
