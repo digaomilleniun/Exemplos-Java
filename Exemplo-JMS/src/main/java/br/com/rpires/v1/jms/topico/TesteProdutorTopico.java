@@ -1,28 +1,26 @@
-/**
- * 
- */
-package br.com.rpires.v1.jms.fila;
+package br.com.rpires.v1.jms.topico;
 
 import java.util.Scanner;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
-import javax.jms.JMSException;
 import javax.jms.Message;
-import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
+import javax.jms.MessageProducer;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 
 /**
- * @author rpires
  * 
- * Cria um listner para consumir todas as mensagens da fila
+ */
+
+/**
+ * @author rpires
+ *
+ * Envia 100 mensagens para o servidor de mensagens
  *
  */
-public class TesteConsumidorNMensagem {
+public class TesteProdutorTopico {
 
 	@SuppressWarnings("resource")
 	public static void main(String args[]) throws Exception {
@@ -35,20 +33,15 @@ public class TesteConsumidorNMensagem {
 		conexao.start();
 		
 		Session session = conexao.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		Destination fila = (Destination) context.lookup("MyQueue");
-		MessageConsumer consumer = session.createConsumer(fila);
-
-		consumer.setMessageListener(new MessageListener() {
-			
-			public void onMessage(Message message) {
-				TextMessage msg = (TextMessage) message;
-				try {
-					System.out.println(msg.getText());
-				} catch (JMSException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		Destination topico = (Destination) context.lookup(""
+				+ "");
+		
+		MessageProducer producer = session.createProducer(topico);
+		
+		for (int i = 0; i <= 1; i++) {
+			Message msg = session.createTextMessage("Enviando mensagem numero:" + i);
+			producer.send(msg);
+		}
 
 		new Scanner(System.in).nextLine();
 

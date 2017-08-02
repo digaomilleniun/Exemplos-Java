@@ -1,28 +1,26 @@
-/**
- * 
- */
-package br.com.rpires.v1.jms.fila;
+package br.com.rpires.v1.jms.topico;
 
 import java.util.Scanner;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
-import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
 import javax.jms.Session;
-import javax.jms.TextMessage;
 import javax.naming.InitialContext;
+
+/**
+ * 
+ */
 
 /**
  * @author rpires
  * 
- * Cria um listner para consumir todas as mensagens da fila
+ * Consome apenas uma mensagem da fila
  *
  */
-public class TesteConsumidorNMensagem {
+public class TesteConsumidor1Topico {
 
 	@SuppressWarnings("resource")
 	public static void main(String args[]) throws Exception {
@@ -35,20 +33,11 @@ public class TesteConsumidorNMensagem {
 		conexao.start();
 		
 		Session session = conexao.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		Destination fila = (Destination) context.lookup("MyQueue");
-		MessageConsumer consumer = session.createConsumer(fila);
+		Destination topico = (Destination) context.lookup("MyTopic");
+		MessageConsumer consumer = session.createConsumer(topico);
 
-		consumer.setMessageListener(new MessageListener() {
-			
-			public void onMessage(Message message) {
-				TextMessage msg = (TextMessage) message;
-				try {
-					System.out.println(msg.getText());
-				} catch (JMSException e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		Message message = consumer.receive();
+		System.out.println("Recebendo mensagem do tópico: " + message);
 
 		new Scanner(System.in).nextLine();
 

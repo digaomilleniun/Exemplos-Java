@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.com.rpires.v1.jms;
+package br.com.rpires.v1.jms.fila;
 
 import java.util.Enumeration;
 
