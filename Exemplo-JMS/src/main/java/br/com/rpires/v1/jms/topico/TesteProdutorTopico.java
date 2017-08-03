@@ -33,8 +33,7 @@ public class TesteProdutorTopico {
 		conexao.start();
 		
 		Session session = conexao.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		Destination topico = (Destination) context.lookup(""
-				+ "");
+		Destination topico = (Destination) context.lookup("MyTopic");
 		
 		MessageProducer producer = session.createProducer(topico);
 		
