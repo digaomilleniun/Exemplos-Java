@@ -1,5 +1,6 @@
 package br.com.rpires.v1.jms.topico;
 
+import java.io.StringWriter;
 import java.util.Scanner;
 
 import javax.jms.Connection;
@@ -9,6 +10,10 @@ import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
 import javax.naming.InitialContext;
+import javax.xml.bind.JAXB;
+
+import br.com.rpires.v1.jms.modelo.Pedido;
+import br.com.rpires.v1.jms.modelo.PedidoFactory;
 
 /**
  * 
@@ -20,7 +25,7 @@ import javax.naming.InitialContext;
  * Envia 100 mensagens para o servidor de mensagens
  *
  */
-public class TesteProdutorTopico {
+public class TesteProdutorTopicoObjeto {
 
 	@SuppressWarnings("resource")
 	public static void main(String args[]) throws Exception {
@@ -36,9 +41,12 @@ public class TesteProdutorTopico {
 		Destination topico = (Destination) context.lookup("MyTopic");
 		
 		MessageProducer producer = session.createProducer(topico);
+		PedidoFactory factory = new PedidoFactory();
+		
+		Pedido pedido = factory.geraPedidoComValores();
 		
 		for (int i = 0; i <= 1; i++) {
-			Message msg = session.createTextMessage("Enviando mensagem numero:" + i);
+			Message msg = session.createObjectMessage(pedido);
 			
 			//Passando a propriedade para o selector analisar no consumidor.
 			msg.setBooleanProperty("ebook", false);

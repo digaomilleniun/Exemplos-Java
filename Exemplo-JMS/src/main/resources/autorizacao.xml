@@ -1,0 +1,23 @@
+
+<!--
+Para ativar a segurança com usuário e senha deve-se adicionar no arquivo 
+conf/activenq.xml do servidor ActiveMQ o código abaixo no setor de plugins
+
+No código java deve-se criar a conneção com o código: 
+Connection connection = cf.createConnection("user", "senha");
+-->
+
+<authorizationPlugin>
+    <map>
+      <authorizationMap>
+        <authorizationEntries>
+          <authorizationEntry queue="financeiro" read="users" write="users" admin="users,admins" />
+          <authorizationEntry topic="comercial" read="users" write="users" admin="users,admins" />
+          <authorizationEntry topic="ActiveMQ.Advisory.>" read="users,admins" write="users,admins" admin="users,admins"/>
+        </authorizationEntries>
+        <tempDestinationAuthorizationEntry>
+          <tempDestinationAuthorizationEntry read="admin" write="admin" admin="admin"/>
+        </tempDestinationAuthorizationEntry>
+      </authorizationMap>
+    </map>
+</authorizationPlugin>

@@ -17,7 +17,7 @@ import javax.naming.InitialContext;
 /**
  * @author rpires
  * 
- * Consome apenas uma mensagem da fila
+ * Consome apenas uma mensagem da fila e o mesmo deve estar online antes do servidor de mensagens recebe-lá.
  *
  */
 public class TesteConsumidor1Topico {

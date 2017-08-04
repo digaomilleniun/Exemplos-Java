@@ -21,11 +21,11 @@ import javax.naming.InitialContext;
 /**
  * @author rpires
  * 
- * Cria um listner para consumir todas as mensagens da fila independente se a mensagem foi enviada antes ou depois desta classe ser inicializada.
+ * Trabalhando com selectores.
  * 
  *
  */
-public class TesteConsumidor2NTopicos {
+public class TesteConsumidor2NTopicosSelector {
 
 	@SuppressWarnings("resource")
 	public static void main(String args[]) throws Exception {
@@ -34,14 +34,16 @@ public class TesteConsumidor2NTopicos {
 		// importe do package javax.jms
 		ConnectionFactory cf = (ConnectionFactory) context.lookup("ConnectionFactory");
 		Connection conexao = cf.createConnection();
-		conexao.setClientID(TesteConsumidor2NTopicos.class.getName());
+		conexao.setClientID(TesteConsumidor2NTopicosSelector.class.getName());
 
 		conexao.start();
 		
 		Session session = conexao.createSession(false, Session.AUTO_ACKNOWLEDGE);
 		Topic topico = (Topic) context.lookup("MyTopic");
-		//MessageConsumer consumer = session.createConsumer(topico);
-		MessageConsumer consumer = session.createDurableSubscriber(topico, TesteConsumidor2NTopicos.class.getName());
+		
+		//ebook=false - Mensagem será recebida somente se o ebook for igual a false
+		MessageConsumer consumer = 
+				session.createDurableSubscriber(topico, TesteConsumidor2NTopicosSelector.class.getName(), "ebook=false", false);
 
 		consumer.setMessageListener(new MessageListener() {
 			
