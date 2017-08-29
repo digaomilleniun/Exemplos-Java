@@ -1,19 +1,19 @@
 /**
  * 
  */
-package br.com.rpires.v1.jms.topico;
+package br.com.rpires.v1.jms.fila;
 
 import java.util.Scanner;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
-import javax.jms.Topic;
 import javax.naming.InitialContext;
 
 import br.com.rpires.v1.jms.modelo.Pedido;
@@ -21,48 +21,27 @@ import br.com.rpires.v1.jms.modelo.Pedido;
 /**
  * @author rpires
  * 
- * Cria um listner para consumir todas as mensagens da fila independente se a mensagem foi enviada antes ou depois desta classe ser inicializada.
- * 
+ * Cria um listner para consumir todas as mensagens da fila
  *
  */
-public class TesteConsumidor2NTopicosObjeto {
+public class TesteConsumidorNMensagemObjectDQL {
 
 	@SuppressWarnings("resource")
 	public static void main(String args[]) throws Exception {
-		
-		//Obrigat√≥rio para deserializar objetos. Package espec√≠fico
-		//System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES","java.lang,br.com.rpires.v1.jms.topico");
-		
-		//Todos os pacakges
-		//System.setProperty("org.apache.activemq.SERIALIZABLE_PACKAGES","*");
-		
-		
 		InitialContext context = new InitialContext();
 
 		// importe do package javax.jms
 		ConnectionFactory cf = (ConnectionFactory) context.lookup("ConnectionFactory");
 		Connection conexao = cf.createConnection();
-		conexao.setClientID(TesteConsumidor2NTopicosObjeto.class.getName());
 
 		conexao.start();
-		
 		Session session = conexao.createSession(false, Session.AUTO_ACKNOWLEDGE);
-		Topic topico = (Topic) context.lookup("MyTopic");
-		//MessageConsumer consumer = session.createConsumer(topico);
-		MessageConsumer consumer = session.createDurableSubscriber(topico, TesteConsumidor2NTopicosObjeto.class.getName());
+		Destination fila = (Destination) context.lookup("ActiveMQ.DLQ");
+		MessageConsumer consumer = session.createConsumer(fila);
 
 		consumer.setMessageListener(new MessageListener() {
 			
 			public void onMessage(Message message) {
-				// Neste codigo a mensagem n„o È entregue e se cria uma fila no ActiveMQ de n„o enviados.
-				/*
-				TextMessage msg = (TextMessage) message;
-				try {
-					System.out.println(msg.getText());
-				} catch (JMSException e) {
-					e.printStackTrace();
-				}*/
-				
 				ObjectMessage msg = (ObjectMessage) message;
 				try {
 					Pedido pedido = (Pedido) msg.getObject();
